@@ -4,26 +4,18 @@
  */
 
 module.exports = function getLoveTrianglesCount(preferences = []) {
-  // your implementation
+    let count = 0;
+    let relationNum = 3;
 
-    //lov = 0;
-    var count = 0;
-    var lov = 0;
-        do {
-            if ((preferences[lov] === lov + 2 && preferences[lov + 1] === lov + 3 && preferences[lov + 2] === lov + 1 )
-            || (preferences[lov] === lov + 3 && preferences[lov + 1] === lov + 1 && preferences[lov + 2] === lov + 2 )
-            )
-                {
-                count += 1;
-                lov += 1;
+    checkRelation = function(value, index, array, initialIndex, reqDepth, depth = 1) {
+        let newIndex = value - 1;
+        return (depth < reqDepth) ?  (newIndex > -1 && newIndex < array.length && newIndex !== index)
+            && checkRelation(array[newIndex], newIndex, array, initialIndex, reqDepth, ++depth)
+            : newIndex === initialIndex;
+        };
 
-            } else {
-                lov += 1;
-            }
-
-        }
-        //do {count += 1}
-        while (lov < preferences.length);
-        //console.log(count);
-        return count;
+    preferences.forEach(function(value, index, array) {
+        if (checkRelation(value, index, array, index, relationNum)) count++;
+    });
+    return count/relationNum;
 };
